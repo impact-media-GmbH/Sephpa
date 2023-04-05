@@ -109,11 +109,11 @@ abstract class SepaCreditTransferCollection implements SepaPaymentCollection
     public function getCollectionData($dateFormat)
     {
         $data = ['due_date' => empty($this->transferInfo['reqdExctnDt'])
-                     ? DateTime::createFromFormat('Y-m-d', SepaUtilities::getDateWithOffset(1))->format($dateFormat)
-                     : DateTime::createFromFormat('Y-m-d', $this->transferInfo['reqdExctnDt'])->format($dateFormat),
-                 'collection_reference' => $this->transferInfo['pmtInfId'],
-                 'debtor_name' => $this->transferInfo['dbtr'],
-                 'iban' => $this->transferInfo['iban']];
+            ? DateTime::createFromFormat('Y-m-d', SepaUtilities::getDateWithOffset(1))->format($dateFormat)
+            : DateTime::createFromFormat('Y-m-d', $this->transferInfo['reqdExctnDt'])->format($dateFormat),
+            'collection_reference' => $this->transferInfo['pmtInfId'],
+            'debtor_name' => $this->transferInfo['dbtr'],
+            'iban' => $this->transferInfo['iban']];
 
         if(!empty($this->transferInfo['bic']))
             $data['bic'] = $this->transferInfo['bic'];
@@ -133,12 +133,12 @@ abstract class SepaCreditTransferCollection implements SepaPaymentCollection
         foreach($this->payments as $payment)
         {
             $tmp = ['creditor_name' => $payment['cdtr'],
-                    'iban' => $payment['iban'],
-                    'remittance_information' => isset($payment['rmtInf']) ? $payment['rmtInf'] : '',
-                    'amount' => sprintf($moneyFormat['currency'],
-                                        number_format($payment['instdAmt'], 2,
-                                                      $moneyFormat['dec_point'],
-                                                      $moneyFormat['thousands_sep']))
+                'iban' => $payment['iban'],
+                'remittance_information' => isset($payment['rmtInf']) ? $payment['rmtInf'] : '',
+                'amount' => sprintf($moneyFormat['currency'],
+                    number_format($payment['instdAmt'], 2,
+                        $moneyFormat['dec_point'],
+                        $moneyFormat['thousands_sep']))
             ];
 
             if(isset($payment['bic']))

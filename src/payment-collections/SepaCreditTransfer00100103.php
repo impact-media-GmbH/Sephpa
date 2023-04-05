@@ -83,7 +83,7 @@ class SepaCreditTransfer00100103 extends SepaCreditTransferCollection
             $bicRequired = (!SepaUtilities::isEEATransaction($this->dbtrIban,$paymentInfo['iban']));
 
             $checkResult = SepaUtilities::checkAndSanitizeAll($paymentInfo, $this->sanitizeFlags,
-                                                              ['allowEmptyBic' => !$bicRequired]);
+                ['allowEmptyBic' => !$bicRequired]);
 
             if($checkResult !== true)
                 throw new SephpaInputException('The values of ' . $checkResult . ' are invalid.');
@@ -95,7 +95,7 @@ class SepaCreditTransfer00100103 extends SepaCreditTransferCollection
 
         $this->payments[] = $paymentInfo;
     }
-    
+
     /**
      * Generates the xml for the collection using generatePaymentXml
      * @param \SimpleXMLElement $pmtInf The PmtInf-Child of the xml object
@@ -149,10 +149,10 @@ class SepaCreditTransfer00100103 extends SepaCreditTransferCollection
 
         if( !empty( $this->transferInfo['bic'] ) )
             $pmtInf->addChild('DbtrAgt')->addChild('FinInstnId')
-                   ->addChild('BIC', $this->transferInfo['bic']);
+                ->addChild('BIC', $this->transferInfo['bic']);
         else
             $pmtInf->addChild('DbtrAgt')->addChild('FinInstnId')->addChild('Othr')
-                   ->addChild('Id', 'NOTPROVIDED');
+                ->addChild('Id', 'NOTPROVIDED');
 
         if( isset( $this->transferInfo['ultmtDbtr'] ) )
             $pmtInf->addChild('UltmtDbtr')->addChild('Nm', $this->transferInfo['ultmtDbtr']);
@@ -165,7 +165,7 @@ class SepaCreditTransfer00100103 extends SepaCreditTransferCollection
             $this->generatePaymentXml($cdtTrfTxInf, $payment, $ccy);
         }
     }
-    
+
     /**
      * generates the xml for a single payment
      * @param \SimpleXMLElement $cdtTrfTxInf
@@ -177,7 +177,7 @@ class SepaCreditTransfer00100103 extends SepaCreditTransferCollection
     {
         $cdtTrfTxInf->addChild('PmtId')->addChild('EndToEndId', $payment['pmtId']);
         $cdtTrfTxInf->addChild('Amt')->addChild('InstdAmt', sprintf("%01.2F", $payment['instdAmt']))
-                    ->addAttribute('Ccy', $ccy);
+            ->addAttribute('Ccy', $ccy);
 
         if( isset( $payment['ultmtDbtr'] ) ||  isset( $payment['ultmtDbtrId'] ) ){
             $cdtTrfTxInf->addChild('UltmtDbtr');
@@ -191,7 +191,7 @@ class SepaCreditTransfer00100103 extends SepaCreditTransferCollection
 
         if( !empty( $payment['bic'] ) )
             $cdtTrfTxInf->addChild('CdtrAgt')->addChild('FinInstnId')
-                        ->addChild('BIC', $payment['bic']);
+                ->addChild('BIC', $payment['bic']);
 
         $cdtTrfTxInf->addChild('Cdtr')->addChild('Nm', $payment['cdtr']);
 

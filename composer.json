@@ -1,50 +1,60 @@
 {
-  "name": "abcaeffchen/sephpa",
-  "type": "library",
-  "description": "Generates SEPA files for credit transfers (pain.001.001.03, pain.001.002.03, pain.001.003.03) and direct debit (pain.008.001.02, pain.008.002.02, pain.008.003.02)",
-  "keywords": [
-    "sepa",
-    "xml",
-    "banking",
-    "files",
-    "finance",
-    "credit transfer",
-    "direct debit",
-    "php7",
-    "php8"
-  ],
-  "homepage": "https://github.com/AbcAeffchen/Sephpa",
-  "license": "LGPL-3.0",
-  "authors": [
-    {
-      "name": "Alexander Schickedanz (AbcAeffchen)",
-      "email": "abcaeffchen@gmail.com",
-      "role": "Developer"
+    "name": "abcaeffchen/sephpa",
+    "type": "library",
+    "description": "Generates SEPA files for credit transfers (pain.001.001.03, pain.001.002.03, pain.001.003.03) and direct debit (pain.008.001.02, pain.008.002.02, pain.008.003.02)",
+    "keywords": [
+        "sepa",
+        "xml",
+        "banking",
+        "files",
+        "finance",
+        "credit transfer",
+        "direct debit",
+        "php7",
+        "php8"
+    ],
+    "homepage": "https://github.com/AbcAeffchen/Sephpa",
+    "license": "LGPL-3.0",
+    "authors": [
+        {
+            "name": "Alexander Schickedanz (AbcAeffchen)",
+            "email": "abcaeffchen@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/AbcAeffchen/Sephpa/issues"
+    },
+    "require": {
+        "php": ">=5.6",
+        "ext-xml": "*",
+        "ext-simplexml": "*",
+        "abcaeffchen/sepa-utilities": "dev-php56compatibility"
+    },
+    "require-dev": {
+        "ext-dom": "*",
+        "ext-zip": "*",
+        "phpunit/phpunit": "^5",
+        "abcaeffchen/sepa-documentor": "dev-php56compatibility"
+    },
+    "suggest": {
+        "ext-zip": "Needed to store or download multiple files at once.",
+        "abcaeffchen/sepa-documentor": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AbcAeffchen\\Sephpa\\": "src/",
+            "AbcAeffchen\\Sephpa\\PaymentCollections\\": "src/payment-collections/"
+        }
+    },
+    "config": {
+        "platform-check": false
+    },
+    "repositories": {
+        "private-packagist": {
+            "type": "composer",
+            "url": "https://repo.packagist.com/impactmedia/gooding/"
+        },
+        "packagist.org": false
     }
-  ],
-  "support": {
-    "issues": "https://github.com/AbcAeffchen/Sephpa/issues"
-  },
-  "require": {
-    "php": ">=7.1",
-    "ext-xml": "*",
-    "ext-simplexml": "*",
-    "abcaeffchen/sepa-utilities": "^1.3.4"
-  },
-  "require-dev": {
-    "ext-dom": "*",
-    "ext-zip": "*",
-    "phpunit/phpunit": "^9 || ^8 || ^7",
-    "abcaeffchen/sepa-documentor": "^2.0"
-  },
-  "suggest": {
-    "ext-zip": "Needed to store or download multiple files at once.",
-    "abcaeffchen/sepa-documentor": "^2.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "AbcAeffchen\\Sephpa\\": "src/",
-      "AbcAeffchen\\Sephpa\\PaymentCollections\\": "src/payment-collections/"
-    }
-  }
 }

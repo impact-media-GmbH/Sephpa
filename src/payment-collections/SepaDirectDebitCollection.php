@@ -110,9 +110,9 @@ abstract class SepaDirectDebitCollection implements SepaPaymentCollection
         $data = ['due_date' => empty($this->debitInfo['reqdExctnDt'])
             ? DateTime::createFromFormat('Y-m-d', SepaUtilities::getDateWithOffset(1))->format($dateFormat)
             : DateTime::createFromFormat('Y-m-d', $this->debitInfo['reqdExctnDt'])->format($dateFormat),
-                 'collection_reference' => $this->debitInfo['pmtInfId'],
-                 'creditor_name' => $this->debitInfo['cdtr'],
-                 'iban' => $this->debitInfo['iban']];
+            'collection_reference' => $this->debitInfo['pmtInfId'],
+            'creditor_name' => $this->debitInfo['cdtr'],
+            'iban' => $this->debitInfo['iban']];
 
         if(!empty($this->debitInfo['bic']))
             $data['bic'] = $this->debitInfo['bic'];
@@ -132,12 +132,12 @@ abstract class SepaDirectDebitCollection implements SepaPaymentCollection
         foreach($this->payments as $payment)
         {
             $tmp = ['debtor_name' => $payment['dbtr'],
-                    'iban' => $payment['iban'],
-                    'remittance_information' => isset($payment['rmtInf']) ? $payment['rmtInf'] : '',
-                    'amount' => sprintf($moneyFormat['currency'],
-                                        number_format($payment['instdAmt'], 2,
-                                                      $moneyFormat['dec_point'],
-                                                      $moneyFormat['thousands_sep']))
+                'iban' => $payment['iban'],
+                'remittance_information' => isset($payment['rmtInf']) ? $payment['rmtInf'] : '',
+                'amount' => sprintf($moneyFormat['currency'],
+                    number_format($payment['instdAmt'], 2,
+                        $moneyFormat['dec_point'],
+                        $moneyFormat['thousands_sep']))
             ];
 
             if(isset($payment['bic']))

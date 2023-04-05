@@ -15,7 +15,7 @@ use AbcAeffchen\SepaUtilities\SepaUtilities;
 
 class TestDataProvider
 {
-    private static function isCreditTransfer(int $version)
+    private static function isCreditTransfer($version)
     {
         return SepaUtilities::version2transactionType($version) === SepaUtilities::SEPA_TRANSACTION_TYPE_CT;
     }
@@ -27,16 +27,21 @@ class TestDataProvider
      *                          null = random
      * @return array
      */
-    private static function getPstlAdrData(?int $adrType = null) : array
+    private static function getPstlAdrData($adrType = null)
     {
         if($adrType === null)
-            $adrType = random_int(0, 2);
+            $adrType = self::random_int(0, 2);
 
         return ['ctry' => 'DE',
                 'adrLine' => $adrType === 0 ? 'test 1' : ($adrType === 1 ? ['test 1'] : ['test 1', 'test 2'])];
     }
 
-    public static function getCreditTransferData(bool $addBIC, bool $addOptionalData) : array
+    private static function random_int($min, $max)
+{
+    return (unpack("N", openssl_random_pseudo_bytes(4)) % ($max - $min)) + $min;
+}
+
+    public static function getCreditTransferData($addBIC, $addOptionalData)
     {
         $transferInformation = [
             'pmtInfId'      => 'PaymentCollectionID-1234',  // ID of the payment collection
@@ -60,7 +65,7 @@ class TestDataProvider
         return $transferInformation;
     }
 
-    public static function getCreditTransferPaymentData(bool $addBIC, bool $addOptionalData, int $id = 1) : array
+    public static function getCreditTransferPaymentData($addBIC, $addOptionalData, $id = 1)
     {
         $paymentData = [
             'pmtId'     => 'PaymentID-1234-' . $id,     // ID of the payment (EndToEndId)
@@ -81,13 +86,13 @@ class TestDataProvider
             $paymentData['ultmtCdtr'] = 'Ultimate Creditor Name';   // just an information, this do not affect the payment (max 70 characters)
             $paymentData['rmtInf']    = 'Remittance Information';   // unstructured information about the remittance (max 140 characters)
             $paymentData['purp']      = 'BONU';                     // Four letter code
-            $paymentData['pstlAdr']   = self::getPstlAdrData(($id ?? 2) % 3);
+            $paymentData['pstlAdr']   = self::getPstlAdrData((isset($id) ? $id : 2) % 3);
         }
 
         return $paymentData;
     }
 
-    public static function getDirectDebitData(bool $addBIC, bool $addOptionalData) : array
+    public static function getDirectDebitData($addBIC, $addOptionalData)
     {
         $directDebitInformation = [
             'pmtInfId'      => 'PaymentCollectionID-1235',  // ID of the payment collection
@@ -114,7 +119,7 @@ class TestDataProvider
         return $directDebitInformation;
     }
 
-    public static function getDirectDebitPaymentData(bool $addBIC, bool $addOptionalData, int $id = 1) : array
+    public static function getDirectDebitPaymentData($addBIC, $addOptionalData, $id = 1)
     {
         $paymentData = [
             'pmtId'               => 'PaymentID-1235-' . $id,        // ID of the payment (EndToEndId)
@@ -136,7 +141,7 @@ class TestDataProvider
             $paymentData['ultmtDbtr']           = 'Ultimate Debtor Name';    // just an information, this do not affect the payment (max 70 characters)
             $paymentData['rmtInf']              = 'Remittance Information';  // unstructured information about the remittance (max 140 characters)
             $paymentData['purp']                = 'BONU';                    // Four letter code
-            $paymentData['pstlAdr']             = self::getPstlAdrData(($id ?? 2) % 3);
+            $paymentData['pstlAdr']             = self::getPstlAdrData((isset($id) ? $id : 2) % 3);
             // only use this if 'amdmntInd' is 'true'. at least one must be used
             $paymentData['orgnlMndtId']         = 'Original-Mandat-ID';
             $paymentData['orgnlCdtrSchmeId_nm'] = 'Creditor-Identifier Name';
@@ -149,14 +154,14 @@ class TestDataProvider
         return $paymentData;
     }
 
-    public static function getCollectionData(int $version, bool $addBIC, bool $addOptionalData)
+    public static function getCollectionData($version, $addBIC, $addOptionalData)
     {
         return self::isCreditTransfer($version)
             ? self::getCreditTransferData($addBIC, $addOptionalData)
             : self::getDirectDebitData($addBIC, $addOptionalData);
     }
 
-    public static function getPaymentData(int $version, bool $addBIC, bool $addOptionalData, int $id = 1)
+    public static function getPaymentData($version, $addBIC, $addOptionalData, $id = 1)
     {
         return self::isCreditTransfer($version)
             ? self::getCreditTransferPaymentData($addBIC, $addOptionalData, $id)
@@ -164,18 +169,18 @@ class TestDataProvider
     }
 
     /**
-     * @param int         $version Use SephpaCreditTransfer::SEPA_PAIN_001_* and SephpaDirectDebit::SEPA_PAIN_008_* constants.
-     * @param bool        $addBIC
-     * @param bool        $addOptionalData
-     * @param bool        $checkAndSanitize
+     * @param         $version Use SephpaCreditTransfer::SEPA_PAIN_001_* and SephpaDirectDebit::SEPA_PAIN_008_* constants.
+     * @param        $addBIC
+     * @param        $addOptionalData
+     * @param        $checkAndSanitize
      * @param array       $orgId
      * @param string|null $initgPtyId
-     * @param int         $numCollections
-     * @param int         $numPayments
+     * @param         $numCollections
+     * @param         $numPayments
      * @return SephpaCreditTransfer|SephpaDirectDebit
      * @throws SephpaInputException
      */
-    public static function getFile(int $version, bool $addBIC, bool $addOptionalData, bool $checkAndSanitize, array $orgId = [], ?string $initgPtyId = null, int $numCollections = 1, int $numPayments = 3)
+    public static function getFile($version, $addBIC, $addOptionalData, $checkAndSanitize, array $orgId = [], $initgPtyId = null, $numCollections = 1, $numPayments = 3)
     {
         $fileClass = self::isCreditTransfer($version)
             ? 'AbcAeffchen\Sephpa\SephpaCreditTransfer'

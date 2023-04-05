@@ -16,7 +16,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/TestDataProvider.php';
 
 use AbcAeffchen\SepaUtilities\SepaUtilities;
-use AbcAeffchen\Sephpa\{Sephpa, SephpaCreditTransfer, SephpaDirectDebit, SephpaInputException};
+use AbcAeffchen\Sephpa\Sephpa;
+use AbcAeffchen\Sephpa\SephpaCreditTransfer;
+use AbcAeffchen\Sephpa\SephpaDirectDebit;
+use AbcAeffchen\Sephpa\SephpaInputException;
 use AbcAeffchen\Sephpa\TestDataProvider as TDP;
 
 class ReturnReferenceTestClass
@@ -38,7 +41,7 @@ class ReturnReferenceTestClass
     }
 }
 
-class SephpaTest extends PHPUnit\Framework\TestCase
+class SephpaTest extends PHPUnit_Framework_TestCase
 {
     public function ctVersionProvider()
     {
@@ -75,7 +78,7 @@ class SephpaTest extends PHPUnit\Framework\TestCase
      * @param int $n
      * @return Generator
      */
-    private function generateBooleanCombinations(int $n)
+    private function generateBooleanCombinations($n)
     {
         assert($n > 0);
         $booleans = array_fill(0, $n, false);
@@ -130,7 +133,7 @@ class SephpaTest extends PHPUnit\Framework\TestCase
      * @throws SephpaInputException
      * @throws \Mpdf\MpdfException
      */
-    private function validateSchema(Sephpa $sephpaFile, string $xsdFile)
+    private function validateSchema(Sephpa $sephpaFile, $xsdFile)
     {
         static::assertTrue($this->getDomDoc($sephpaFile)->schemaValidate($xsdFile));
     }
@@ -214,8 +217,10 @@ class SephpaTest extends PHPUnit\Framework\TestCase
                                            SephpaDirectDebit::SEPA_PAIN_008_002_02]);
 
         // validate against schema
-        foreach($this->generateBooleanCombinations(3) as [$bic, $opt, $check])
+        $combinations = $this->generateBooleanCombinations(3);
+        foreach($combinations as $combination)
         {
+            list($bic, $opt, $check) = $combination;
             try
             {
                 $this->validateSchema(TDP::getFile($version, $bic, $opt, $check), $xsdFile);
@@ -227,8 +232,10 @@ class SephpaTest extends PHPUnit\Framework\TestCase
         }
 
         // check that checking does not change the result.
-        foreach($this->generateBooleanCombinations(2) as [$bic, $opt])
+        $combinations = $this->generateBooleanCombinations(2);
+        foreach($combinations as $combination)
         {
+            list($bic, $opt) = $combination;
             if($bicRequired && !$bic)
                 continue;
 

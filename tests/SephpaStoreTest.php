@@ -13,11 +13,15 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/TestDataProvider.php';
 
 use Mpdf\MpdfException;
-use AbcAeffchen\Sephpa\{SephpaCreditTransfer, SephpaDirectDebit, SephpaInputException, SephpaMultiFile};
+use AbcAeffchen\Sephpa\Sephpa;
+use AbcAeffchen\Sephpa\SephpaCreditTransfer;
+use AbcAeffchen\Sephpa\SephpaDirectDebit;
+use AbcAeffchen\Sephpa\SephpaInputException;
+use AbcAeffchen\Sephpa\SephpaMultiFile;
 
 use AbcAeffchen\Sephpa\TestDataProvider as TDP;
 
-class SephpaStoreTest extends PHPUnit\Framework\TestCase
+class SephpaStoreTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Tests if File Routing Slip and Control List are generated. This tests creates an output

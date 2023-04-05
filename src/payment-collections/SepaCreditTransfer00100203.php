@@ -146,7 +146,7 @@ class SepaCreditTransfer00100203 extends SepaCreditTransferCollection
         $dbtrAcct->addChild('Ccy', $ccy);
 
         $pmtInf->addChild('DbtrAgt')->addChild('FinInstnId')
-               ->addChild('BIC', $this->transferInfo['bic']);
+            ->addChild('BIC', $this->transferInfo['bic']);
 
         if( isset( $this->transferInfo['ultmtDbtr'] ) )
             $pmtInf->addChild('UltmtDbtr')->addChild('Nm', $this->transferInfo['ultmtDbtr']);
@@ -172,7 +172,7 @@ class SepaCreditTransfer00100203 extends SepaCreditTransferCollection
     {
         $cdtTrfTxInf->addChild('PmtId')->addChild('EndToEndId', $payment['pmtId']);
         $cdtTrfTxInf->addChild('Amt')->addChild('InstdAmt', $payment['instdAmt'])
-                    ->addAttribute('Ccy', $ccy);
+            ->addAttribute('Ccy', $ccy);
 
         if( isset( $payment['ultmtDbtr'] ) ||  isset( $payment['ultmtDbtrId'] ) ){
             $cdtTrfTxInf->addChild('UltmtDbtr');
@@ -185,7 +185,7 @@ class SepaCreditTransfer00100203 extends SepaCreditTransferCollection
         }
 
         $cdtTrfTxInf->addChild('CdtrAgt')->addChild('FinInstnId')
-                    ->addChild('BIC', $payment['bic']);
+            ->addChild('BIC', $payment['bic']);
         $cdtTrfTxInf->addChild('Cdtr')->addChild('Nm', $payment['cdtr']);
 
         if(isset($payment['pstlAdr']))

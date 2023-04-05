@@ -43,10 +43,10 @@ class SepaDirectDebit00800102Austrian003 extends SepaDirectDebit00800102
         {
 
             if( SepaUtilities::containsNotAnyKey($paymentInfo, ['orgnlMndtId',
-                                                                'orgnlCdtrSchmeId_nm',
-                                                                'orgnlCdtrSchmeId_id',
-                                                                'orgnlDbtrAcct_iban',
-                                                                'orgnlDbtrAgt'])
+                'orgnlCdtrSchmeId_nm',
+                'orgnlCdtrSchmeId_id',
+                'orgnlDbtrAcct_iban',
+                'orgnlDbtrAgt'])
             )
                 throw new SephpaInputException('You set \'amdmntInd\' to \'true\', so you have to set also at least one of the following inputs: \'orgnlMndtId\', \'orgnlCdtrSchmeId_nm\', \'orgnlCdtrSchmeId_id\', \'orgnlDbtrAcct_iban\', \'orgnlDbtrAgt\'.');
 

@@ -20,29 +20,29 @@ require_once __DIR__ . '/Sephpa.php';
 class SephpaCreditTransfer extends Sephpa
 {
     // credit transfers versions
-    public const SEPA_PAIN_001_001_03 = SepaUtilities::SEPA_PAIN_001_001_03;
-    public const SEPA_PAIN_001_002_03 = SepaUtilities::SEPA_PAIN_001_002_03;
-    public const SEPA_PAIN_001_003_03 = SepaUtilities::SEPA_PAIN_001_003_03;
+    const SEPA_PAIN_001_001_03 = SepaUtilities::SEPA_PAIN_001_001_03;
+    const SEPA_PAIN_001_002_03 = SepaUtilities::SEPA_PAIN_001_002_03;
+    const SEPA_PAIN_001_003_03 = SepaUtilities::SEPA_PAIN_001_003_03;
 
     /**
      * @type string INITIAL_STRING_CT Initial sting for credit transfer pain.001.001.03
      */
-    private const INITIAL_STRING_PAIN_001_001_03 = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03 pain.001.001.03.xsd"></Document>';
+    const INITIAL_STRING_PAIN_001_001_03 = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03 pain.001.001.03.xsd"></Document>';
     /**
      * @type string INITIAL_STRING_CT Initial sting for credit transfer pain.001.002.03
      */
-    private const INITIAL_STRING_PAIN_001_002_03 = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.002.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.002.03 pain.001.002.03.xsd"></Document>';
+    const INITIAL_STRING_PAIN_001_002_03 = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.002.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.002.03 pain.001.002.03.xsd"></Document>';
     /**
      * @type string INITIAL_STRING_CT Initial sting for credit transfer pain.001.003.03
      */
-    private const INITIAL_STRING_PAIN_001_003_03 = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03 pain.001.003.03.xsd"></Document>';
+    const INITIAL_STRING_PAIN_001_003_03 = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03 pain.001.003.03.xsd"></Document>';
 
-    private const VERSIONS = [self::SEPA_PAIN_001_001_03 => ['class'   => '00100103',
-                                                             'initStr' => self::INITIAL_STRING_PAIN_001_001_03],
-                              self::SEPA_PAIN_001_002_03 => ['class'   => '00100203',
-                                                             'initStr' => self::INITIAL_STRING_PAIN_001_002_03],
-                              self::SEPA_PAIN_001_003_03 => ['class'   => '00100303',
-                                                             'initStr' => self::INITIAL_STRING_PAIN_001_003_03]];
+    const VERSIONS = [self::SEPA_PAIN_001_001_03 => ['class'   => '00100103',
+        'initStr' => self::INITIAL_STRING_PAIN_001_001_03],
+        self::SEPA_PAIN_001_002_03 => ['class'   => '00100203',
+            'initStr' => self::INITIAL_STRING_PAIN_001_002_03],
+        self::SEPA_PAIN_001_003_03 => ['class'   => '00100303',
+            'initStr' => self::INITIAL_STRING_PAIN_001_003_03]];
 
     /**
      * Creates a SepaXmlFile object and sets the head data
@@ -62,14 +62,15 @@ class SephpaCreditTransfer extends Sephpa
      * @param bool     $checkAndSanitize
      * @throws SephpaInputException
      */
-    public function __construct($initgPty, $msgId, $version, array $orgId = [], $initgPtyId = null, $checkAndSanitize = true)
+    function __construct($initgPty, $msgId, $version, array $orgId = [], $initgPtyId = null, $checkAndSanitize = true)
     {
         parent::__construct($initgPty, $msgId, $orgId, $initgPtyId, $checkAndSanitize);
 
         $this->paymentType = 'CstmrCdtTrfInitn';
 
-        if(!isset(self::VERSIONS[$version]))
+        if (empty(self::VERSIONS[$version])) {
             throw new SephpaInputException('You choose an invalid SEPA file version. Please use the SEPA_PAIN_001_* constants.');
+        }
 
         $this->version = $version;
         $this->xmlInitString = self::VERSIONS[$version]['initStr'];
@@ -81,7 +82,7 @@ class SephpaCreditTransfer extends Sephpa
      * @param array $collectionInfo @see \Sephpa\SepaCreditTransfer*::addPayment() for details.
      * @return PaymentCollections\SepaPaymentCollection
      */
-    public function addCollection(array $collectionInfo) : PaymentCollections\SepaPaymentCollection
+    function addCollection(array $collectionInfo)
     {
         $class = 'AbcAeffchen\Sephpa\PaymentCollections\SepaCreditTransfer00' . $this->version;
         $this->paymentCollections[] = new $class($collectionInfo, $this->checkAndSanitize, $this->sanitizeFlags);

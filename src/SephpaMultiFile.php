@@ -34,7 +34,7 @@ class SephpaMultiFile
      * @return SephpaCreditTransfer|SephpaDirectDebit
      * @throws SephpaInputException
      */
-    public function &addFile($initgPty, $msgId, $version, array $orgId = [], $initgPtyId = null, $checkAndSanitize = true) : Sephpa
+    public function &addFile($initgPty, $msgId, $version, array $orgId = [], $initgPtyId = null, $checkAndSanitize = true)
     {
         $class = SepaUtilities::version2transactionType($version) === SepaUtilities::SEPA_TRANSACTION_TYPE_CT
             ? 'AbcAeffchen\Sephpa\SephpaCreditTransfer'
@@ -49,7 +49,7 @@ class SephpaMultiFile
      * @throws SephpaInputException
      * @throws \Mpdf\MpdfException
      */
-    public function download(string $filename, array $options = []) : void
+    public function download(string $filename, array $options = [])
     {
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         print $this->generateCombinedZipFile($options);
@@ -75,7 +75,7 @@ class SephpaMultiFile
      * @throws SephpaInputException
      * @throws \Mpdf\MpdfException
      */
-    private function generateCombinedZipFile(array $options) : string
+    private function generateCombinedZipFile(array $options)
     {
         if(!class_exists('ZipArchive'))
             throw new SephpaInputException('You need the libzip extension (class ZipArchive) to zip multiple files.');

@@ -78,7 +78,7 @@ class SepaDirectDebit00800302 extends SepaDirectDebitCollection
             $bicRequired = (!SepaUtilities::isNationalTransaction($this->debitInfo['iban'], $paymentInfo['iban']) && $this->today <= SepaUtilities::BIC_REQUIRED_THRESHOLD);
 
             $checkResult = SepaUtilities::checkAndSanitizeAll($paymentInfo, $this->sanitizeFlags,
-                                                              ['allowEmptyBic' => !$bicRequired, 'version' => self::VERSION]);
+                ['allowEmptyBic' => !$bicRequired, 'version' => self::VERSION]);
 
             if($checkResult !== true)
                 throw new SephpaInputException('The values of ' . $checkResult . ' are invalid.');
@@ -87,10 +87,10 @@ class SepaDirectDebit00800302 extends SepaDirectDebitCollection
             {
 
                 if( SepaUtilities::containsNotAnyKey($paymentInfo, ['orgnlMndtId',
-                                                                    'orgnlCdtrSchmeId_nm',
-                                                                    'orgnlCdtrSchmeId_id',
-                                                                    'orgnlDbtrAcct_iban',
-                                                                    'orgnlDbtrAgt'])
+                    'orgnlCdtrSchmeId_nm',
+                    'orgnlCdtrSchmeId_id',
+                    'orgnlDbtrAcct_iban',
+                    'orgnlDbtrAgt'])
                 )
                     throw new SephpaInputException('You set \'amdmntInd\' to \'true\', so you have to set also at least one of the following inputs: \'orgnlMndtId\', \'orgnlCdtrSchmeId_nm\', \'orgnlCdtrSchmeId_id\', \'orgnlDbtrAcct_iban\', \'orgnlDbtrAgt\'.');
 
@@ -160,10 +160,10 @@ class SepaDirectDebit00800302 extends SepaDirectDebitCollection
 
         if( !empty( $this->debitInfo['bic'] ) )
             $pmtInf->addChild('CdtrAgt')->addChild('FinInstnId')
-                   ->addChild('BIC', $this->debitInfo['bic']);
+                ->addChild('BIC', $this->debitInfo['bic']);
         else
             $pmtInf->addChild('CdtrAgt')->addChild('FinInstnId')->addChild('Othr')
-                   ->addChild('Id', 'NOTPROVIDED');
+                ->addChild('Id', 'NOTPROVIDED');
 
         if( !empty( $this->debitInfo['ultmtCdtr'] ) )
             $pmtInf->addChild('UltmtCdtr')->addChild('Nm', $this->debitInfo['ultmtCdtr']);
@@ -171,7 +171,7 @@ class SepaDirectDebit00800302 extends SepaDirectDebitCollection
         $pmtInf->addChild('ChrgBr', 'SLEV');
 
         $ci = $pmtInf->addChild('CdtrSchmeId')->addChild('Id')->addChild('PrvtId')
-                     ->addChild('Othr');
+            ->addChild('Othr');
         $ci->addChild('Id', $this->debitInfo['ci']);
         $ci->addChild('SchmeNm')->addChild('Prtry', 'SEPA');
 
@@ -194,7 +194,7 @@ class SepaDirectDebit00800302 extends SepaDirectDebitCollection
     {
         $drctDbtTxInf->addChild('PmtId')->addChild('EndToEndId', $payment['pmtId']);
         $drctDbtTxInf->addChild('InstdAmt', sprintf('%01.2F', $payment['instdAmt']))
-                     ->addAttribute('Ccy', $ccy);
+            ->addAttribute('Ccy', $ccy);
 
         $mndtRltdInf = $drctDbtTxInf->addChild('DrctDbtTx')->addChild('MndtRltdInf');
         $mndtRltdInf->addChild('MndtId', $payment['mndtId']);
@@ -215,17 +215,17 @@ class SepaDirectDebit00800302 extends SepaDirectDebitCollection
                     if( !empty( $payment['orgnlCdtrSchmeId_id'] ) )
                     {
                         $othr = $orgnlCdtrSchmeId->addChild('Id')->addChild('PrvtId')
-                                                 ->addChild('Othr');
+                            ->addChild('Othr');
                         $othr->addChild('Id', $payment['orgnlCdtrSchmeId_id']);
                         $othr->addChild('SchmeNm')->addChild('Prtry', 'SEPA');
                     }
                 }
                 if( !empty( $payment['orgnlDbtrAcct_iban'] ) )
                     $amdmntInd->addChild('OrgnlDbtrAcct')->addChild('Id')
-                              ->addChild('IBAN', $payment['orgnlDbtrAcct_iban']);
+                        ->addChild('IBAN', $payment['orgnlDbtrAcct_iban']);
                 if( !empty( $payment['orgnlDbtrAgt'] ) )
                     $amdmntInd->addChild('OrgnlDbtrAgt')->addChild('FinInstnId')
-                              ->addChild('Othr')->addChild('Id', 'SMNDA');
+                        ->addChild('Othr')->addChild('Id', 'SMNDA');
             }
         }
         if( !empty( $payment['elctrncSgntr'] ) )
@@ -233,10 +233,10 @@ class SepaDirectDebit00800302 extends SepaDirectDebitCollection
 
         if( !empty( $payment['bic'] ) )
             $drctDbtTxInf->addChild('DbtrAgt')->addChild('FinInstnId')
-                   ->addChild('BIC', $payment['bic']);
+                ->addChild('BIC', $payment['bic']);
         else
             $drctDbtTxInf->addChild('DbtrAgt')->addChild('FinInstnId')->addChild('Othr')
-                   ->addChild('Id', 'NOTPROVIDED');
+                ->addChild('Id', 'NOTPROVIDED');
 
         $drctDbtTxInf->addChild('Dbtr')->addChild('Nm', $payment['dbtr']);
 
@@ -257,7 +257,7 @@ class SepaDirectDebit00800302 extends SepaDirectDebitCollection
         }
 
         $drctDbtTxInf->addChild('DbtrAcct')->addChild('Id')
-                     ->addChild('IBAN', $payment['iban']);
+            ->addChild('IBAN', $payment['iban']);
         if( !empty( $payment['ultmtDbtr'] ) )
             $drctDbtTxInf->addChild('UltmtDbtr')->addChild('Nm', $payment['ultmtDbtr']);
         if( !empty( $payment['purp'] ) )
