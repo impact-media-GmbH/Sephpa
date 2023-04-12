@@ -149,7 +149,7 @@ abstract class Sephpa
      * @throws SephpaInputException
      * @return Just the xml code of the file
      */
-    protected function generateXml()
+    public function generateXml()
     {
         if(count($this->paymentCollections) === 0)
             throw new SephpaInputException('No payment collections provided.');
